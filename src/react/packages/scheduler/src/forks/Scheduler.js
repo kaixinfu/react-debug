@@ -18,9 +18,10 @@ import {
   maxYieldMs,
 } from '../SchedulerFeatureFlags';
 
-import {push, pop, peek} from '../SchedulerMinHeap';
+import { push, pop, peek } from '../SchedulerMinHeap';
 
 // TODO: Use symbols?
+// 优先级级别和超时，超时值确定任务在队列中等待执行的时间。具有较高优先级级别的任务具有较短的超时时间
 import {
   ImmediatePriority,
   UserBlockingPriority,
@@ -96,12 +97,12 @@ const localSetImmediate =
 
 const isInputPending =
   typeof navigator !== 'undefined' &&
-  navigator.scheduling !== undefined &&
-  navigator.scheduling.isInputPending !== undefined
+    navigator.scheduling !== undefined &&
+    navigator.scheduling.isInputPending !== undefined
     ? navigator.scheduling.isInputPending.bind(navigator.scheduling)
     : null;
 
-const continuousOptions = {includeContinuous: enableIsInputPendingContinuous};
+const continuousOptions = { includeContinuous: enableIsInputPendingContinuous };
 
 function advanceTimers(currentTime) {
   // Check for tasks that are no longer delayed and add them to the queue.
@@ -292,7 +293,7 @@ function unstable_next(eventHandler) {
 
 function unstable_wrapCallback(callback) {
   var parentPriorityLevel = currentPriorityLevel;
-  return function() {
+  return function () {
     // This is a fork of runWithPriority, inlined for performance.
     var previousPriorityLevel = currentPriorityLevel;
     currentPriorityLevel = parentPriorityLevel;
@@ -500,7 +501,7 @@ function forceFrameRate(fps) {
     // Using console['error'] to evade Babel and ESLint
     console['error'](
       'forceFrameRate takes a positive int between 0 and 125, ' +
-        'forcing frame rates higher than 125 fps is not supported',
+      'forcing frame rates higher than 125 fps is not supported',
     );
     return;
   }
@@ -623,7 +624,7 @@ export {
 
 export const unstable_Profiling = enableProfiling
   ? {
-      startLoggingProfilingEvents,
-      stopLoggingProfilingEvents,
-    }
+    startLoggingProfilingEvents,
+    stopLoggingProfilingEvents,
+  }
   : null;

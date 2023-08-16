@@ -1,33 +1,22 @@
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @flow strict
- */
+// 源码地址：https://github.com/facebook/react/blob/main/packages/scheduler/src/SchedulerMinHeap.js
 
-type Heap = Array<Node>;
-type Node = {|
-  id: number,
-    sortIndex: number,
-|};
-
-export function push(heap: Heap, node: Node): void {
+export function push(heap, node) {
   const index = heap.length;
   heap.push(node);
+
   siftUp(heap, node, index);
 }
 
-export function peek(heap: Heap): Node | null {
+export function peek(heap) {
   return heap.length === 0 ? null : heap[0];
 }
 
-export function pop(heap: Heap): Node | null {
+export function pop(heap) {
   if (heap.length === 0) {
     return null;
   }
   const first = heap[0];
+  // JavaScript 的 pop 方法删除并返回数组的最后一个元素
   const last = heap.pop();
   if (last !== first) {
     heap[0] = last;
@@ -39,15 +28,16 @@ export function pop(heap: Heap): Node | null {
 function siftUp(heap, node, i) {
   let index = i;
   while (index > 0) {
+    // 获取父节点的索引位置
     const parentIndex = (index - 1) >>> 1;
     const parent = heap[parentIndex];
     if (compare(parent, node) > 0) {
-      // The parent is larger. Swap positions.
+      // 如果父节点更大，就交换位置
       heap[parentIndex] = node;
       heap[index] = parent;
       index = parentIndex;
     } else {
-      // The parent is smaller. Exit.
+      // 直到父节点更小，就退出
       return;
     }
   }
@@ -63,30 +53,35 @@ function siftDown(heap, node, i) {
     const rightIndex = leftIndex + 1;
     const right = heap[rightIndex];
 
-    // If the left or right node is smaller, swap with the smaller of those.
+    // 如果 left 比 node 小
     if (compare(left, node) < 0) {
+      // 如果 right 比 left 还小，说明 right 最小，right 与 node 交换
       if (rightIndex < length && compare(right, left) < 0) {
         heap[index] = right;
         heap[rightIndex] = node;
         index = rightIndex;
-      } else {
+      }
+      // 说明 left 最小，left 与 node 交换
+      else {
         heap[index] = left;
         heap[leftIndex] = node;
         index = leftIndex;
       }
-    } else if (rightIndex < length && compare(right, node) < 0) {
+    }
+    // 如果 left node 大，但 right 比 node 小，right 与 node 交换
+    else if (rightIndex < length && compare(right, node) < 0) {
       heap[index] = right;
       heap[rightIndex] = node;
       index = rightIndex;
     } else {
-      // Neither child is smaller. Exit.
+      // 子元素都比 node 大
       return;
     }
   }
 }
 
 function compare(a, b) {
-  // Compare sort index first, then task id.
+  // 首先比较 sortIndex，其次是 id
   const diff = a.sortIndex - b.sortIndex;
   return diff !== 0 ? diff : a.id - b.id;
 }

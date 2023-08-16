@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {REACT_FORWARD_REF_TYPE, REACT_MEMO_TYPE} from 'shared/ReactSymbols';
+import { REACT_FORWARD_REF_TYPE, REACT_MEMO_TYPE } from 'shared/ReactSymbols';
 
 export function forwardRef<Props, ElementType: React$ElementType>(
   render: (props: Props, ref: React$Ref<ElementType>) => React$Node,
@@ -14,8 +14,8 @@ export function forwardRef<Props, ElementType: React$ElementType>(
     if (render != null && render.$$typeof === REACT_MEMO_TYPE) {
       console.error(
         'forwardRef requires a render function but received a `memo` ' +
-          'component. Instead of forwardRef(memo(...)), use ' +
-          'memo(forwardRef(...)).',
+        'component. Instead of forwardRef(memo(...)), use ' +
+        'memo(forwardRef(...)).',
       );
     } else if (typeof render !== 'function') {
       console.error(
@@ -37,7 +37,7 @@ export function forwardRef<Props, ElementType: React$ElementType>(
       if (render.defaultProps != null || render.propTypes != null) {
         console.error(
           'forwardRef render functions do not support propTypes or defaultProps. ' +
-            'Did you accidentally pass a React component?',
+          'Did you accidentally pass a React component?',
         );
       }
     }
@@ -52,10 +52,10 @@ export function forwardRef<Props, ElementType: React$ElementType>(
     Object.defineProperty(elementType, 'displayName', {
       enumerable: false,
       configurable: true,
-      get: function() {
+      get: function () {
         return ownName;
       },
-      set: function(name) {
+      set: function (name) {
         ownName = name;
 
         // The inner component shouldn't inherit this display name in most cases,
